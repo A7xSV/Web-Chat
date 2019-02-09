@@ -1,0 +1,52 @@
+<h1>{{ welcomeMessage }}</h1>
+
+<div class="login">
+  <div *ngIf=" auth.user$ | async as user; else login">
+    <img [src]="user.photoURL" width="50px">
+    <p>
+      <span class="tag is-dark">{{ user.displayName }}</span>
+      <span class="tag is-light">{{ user.uid }}</span>
+    </p>
+
+
+    <button class="button is-small" (click)="auth.signOut()">{{ signoutMessage }}</button>
+    <hr>
+
+    <h3>{{ languageText }}</h3>
+    <mat-button-toggle-group #group="matButtonToggleGroup" [value]="selectedLang" (change)="onLangChange(group.value)">
+      <mat-button-toggle value="en">
+        English
+      </mat-button-toggle>
+      <mat-button-toggle value="zh">
+        中文
+      </mat-button-toggle>
+      <mat-button-toggle value="es">
+        Español
+      </mat-button-toggle>
+    </mat-button-toggle-group>
+    <!-- <div class="example-selected-value">Selected value: {{group.value}}</div> -->
+    <hr>
+
+    <button class="button" (click)="enableFill()">{{ joinMessage }}</button>
+    <button class="button is-info" (click)="cs.create(selectedLang)">{{ createMessage }}</button>
+
+    <div *ngIf="fillLink">
+      <input class="input join-link" [(ngModel)]="isFilled" placeholder="Enter Link" style="width: 60%; margin-top: 3%;">
+      <button [disabled]="isFilled == '' ? true : false" class="button" (click)="joinChat()">Go</button>
+    </div>
+
+    <hr>
+
+    <h3>{{ chatMessage }}</h3>
+
+    <ul>
+      <li *ngFor="let chat of userChats$ | async">
+        <a [routerLink]="'chats/' + chat.id" [queryParams]="{lang: selectedLang}">{{ chat.id }} - {{ chat.messages.length }} {{ messageText }} </a>
+      </li>
+    </ul>
+  </div>
+
+  <ng-template #login>
+    <button class="button" (click)="auth.googleSignIn()">Login with Google</button>
+  </ng-template>
+</div>

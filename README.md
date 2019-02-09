@@ -1,1 +1,6 @@
-# Web-Chat
+# Web Chat
+
+## Setup
+
+`git clone <repo>`
+`npm install`
